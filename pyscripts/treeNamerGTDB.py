@@ -1,6 +1,12 @@
-def main(treeFile:str,dfFile:str,output:str):
+def main(configFile:str):
     from pandas import read_csv
     from Bio import Phylo
+    from json import load
+    with open(configFile,'r') as f:
+        config=load(f)
+    treeFile=config['treeFile']
+    dfFile=config['dfFile']
+    output=config['output']
     tree=Phylo.read(treeFile,'newick')
     df=read_csv(dfFile,sep='\t',index_col=0)
     df.index=df.assembly_accession.apply(lambda x:x.split('.')[0]).values
@@ -19,7 +25,8 @@ def main(treeFile:str,dfFile:str,output:str):
     Phylo.write(tree,f'{output}/ar53_2_withNameCorrected.tree','newick')
 
 if __name__=='__main__':
-    treeFile='/data/irsingh/Zinc_Work/WoL_reset_18Nov2025/Results/treeMaking/GTDBPrune/arch/ar53.tree'
-    dfFile='/data/irsingh/Zinc_Work/WoL_reset_18Nov2025/WoL_ZnBR_Organism_index.tsv'
-    output='/data/irsingh/Zinc_Work/WoL_reset_18Nov2025/Results/finalTree/GTDBTree/arch/'
-    main(treeFile,dfFile,output)
+    from argparse import ArgumentParser
+    program=ArgumentParser(prog='Entro Calculator')
+    program.add_argument('config',type=str)
+    args=program.parse_args()
+    main(args.config)
