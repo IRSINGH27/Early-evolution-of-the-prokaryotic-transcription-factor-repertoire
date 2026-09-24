@@ -22,7 +22,7 @@ def main(configFile:str):
         else:
             pass
     f.close()
-    Phylo.write(tree,f'{output}/ar53_2_withNameCorrected.tree','newick')
+    Phylo.write(tree,f'{output}','newick')
 
 if __name__=='__main__':
     from argparse import ArgumentParser
